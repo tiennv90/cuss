@@ -27,4 +27,8 @@ public class BaggageService {
         baggageRepository.saveAll(baggage);
     }
 
+    public void searchBaggage() {
+
+    }
+
 }

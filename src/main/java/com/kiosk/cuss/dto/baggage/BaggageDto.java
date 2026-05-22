@@ -5,5 +5,5 @@ import lombok.Builder;
 import java.math.BigDecimal;
 
 @Builder
-public record BaggageDto(BigDecimal weight, String tagCode) {
+public record BaggageDto(Long id, Long passengerId, BigDecimal weight, String tagCode) {
 }

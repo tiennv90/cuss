@@ -19,7 +19,7 @@ public class Baggage extends BaseEntity {
     @SequenceGenerator(name = "baggage_seq",sequenceName = "baggage_seq", allocationSize = 5)
     private Long id;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "passenger_id")
     private Passenger passenger;
 
