@@ -27,4 +27,7 @@ public class Flight extends BaseEntity {
 
     @OneToMany(mappedBy = "flight")
     Set<Passenger> passengers = new HashSet<>();
+
+    @Version
+    private Long version;
 }

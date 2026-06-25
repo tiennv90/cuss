@@ -26,8 +26,6 @@ public class FlightService {
     @Transactional
     public void decreaseAvailableSeat(FlightDto flightDto) {
         Flight flight = getFlightById(flightDto.FlightId());
-        Integer seats = flight.getAvailableSeats();
-        flight.setAvailableSeats(--seats);
-        flightRepository.save(flight);
+        flightRepository.decrementSeat(flight.getId(), flight.getVersion());
     }
 }

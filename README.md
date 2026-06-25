@@ -55,9 +55,9 @@ data JSONB
 ## POST /api/checkin
 Passenger check-in
 1. Validate booking (PNR)
-2. Update seat (SeatService)
+2. Update seat (SeatService) and decreaseAvailableSeat (FlightRepository) in Flight with idempotency using optimistic Lock 
 3. Register baggage (BaggageService)
-5. Commit transaction
+4. Commit transaction
 
 ## GET /api/seats
 Get available seats
@@ -89,9 +89,4 @@ Prevent race conditions on seat assignment using optimistic lock or ReentrantLoc
 
 Filter available seats
 
-## Kafka Event Streaming
-
-Topic: checkin-events
-Producer: send event after successful check-in
-Consumer: async processing (e.g., send boarding emails, update DCS)
 
