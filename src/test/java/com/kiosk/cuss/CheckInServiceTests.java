@@ -7,6 +7,7 @@ import com.kiosk.cuss.dto.seat.SeatDto;
 import com.kiosk.cuss.entity.Passenger;
 import com.kiosk.cuss.service.baggage.BaggageService;
 import com.kiosk.cuss.service.checkin.CheckInService;
+import com.kiosk.cuss.service.flight.FlightLockManager;
 import com.kiosk.cuss.service.passenger.PassengerService;
 import com.kiosk.cuss.service.seat.SeatService;
 import org.junit.jupiter.api.Test;
@@ -19,8 +20,10 @@ import org.springframework.context.ApplicationEventPublisher;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -43,6 +46,9 @@ public class CheckInServiceTests {
     @Mock
     private ApplicationEventPublisher applicationEventPublisher;
 
+    @Mock
+    private FlightLockManager flightLockManager;
+
     @Test
     public void testCheckInService() {
         SeatDto seat = SeatDto.builder().seatNumber("ACC1").build();
@@ -59,9 +65,11 @@ public class CheckInServiceTests {
                 .firstName("David").lastName("James").status("NOT_READY").build();
 
         when(passengerService.getPassengerById(1L)).thenReturn(p);
+        when(flightLockManager.getLock(anyLong())).thenReturn(new ReentrantLock());
 
         checkInService.processCheckIn(checkInRequest);
 
+        verify(flightLockManager, times(1)).getLock(42L);
         verify(seatService, times(1)).updateSeat(checkInRequest, p);
         verify(baggageService, times(1)).registerBaggage(baggage, p);
         verify(applicationEventPublisher, times(1)).publishEvent(any());
